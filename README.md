@@ -1,5 +1,5 @@
 
-### 📝 כתיבת לוגים (Client Library Documentation)
+# 📝 כתיבת לוגים (Client Library Documentation)
 
 הספרייה (`logs`) מאפשרת כתיבה אסינכרונית לשרת הלוגים המרכזי. הספרייה תומכת בתיעוד היררכי (פרויקט > מודול), טיפול בשגיאות, ותיעוד קריאות API.
 
