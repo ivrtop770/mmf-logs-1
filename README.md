@@ -10,11 +10,12 @@
 ```yaml
 services:
   my-app:
-...
     volumes:
       - ${LOGS} # טעינת הספרייה
     networks: 
       - logs
+
+
 volumes:
   logs:
     external: true
