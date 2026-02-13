@@ -1,21 +1,23 @@
 
-# 📝 כתיבת לוגים (Client Library Documentation)
+# 📜 MMF Logs - מערכת לוגים מרכזית
 
-הספרייה (`logs`) מאפשרת כתיבה אסינכרונית לשרת הלוגים המרכזי. הספרייה תומכת בתיעוד היררכי (פרויקט > מודול), טיפול בשגיאות, ותיעוד קריאות API.
+## 📚 חלק 1: כתיבת לוגים (Client Library)
 
-## ⚙️ הגדרות דוקר (Docker Compose)
+הספרייה מאפשרת תיעוד היררכי (פרויקט > מודול), טיפול בשגיאות, ותיעוד ייעודי לקריאות API.
 
-כדי שהספרייה תהיה זמינה בקוד, יש למפות אותה ב-`docker-compose.yml` לדוגמא:
+### ⚙️ הגדרות דוקר (Docker Compose)
+
+כדי שהספרייה תהיה זמינה בקוד של המיקרו-שירות שלך, יש למפות את ה-Volume המתאים ולחבר לרשת הלוגים בקובץ `docker-compose.yml`:
 
 ```yaml
 services:
   my-app:
     volumes:
-      - ${LOGS} # טעינת הספרייה
+      - ${LOGS} # טעינת ספריית הלוגים (מוגדר כמשתנה סביבה)
     networks: 
       - logs
 
-
+# הגדרת הווליום והרשת כחיצוניים (נוצרו בשרת הלוגים)
 volumes:
   logs:
     external: true
@@ -23,23 +25,24 @@ volumes:
 networks:
   logs:
     external: true
+
 ```
 
-## 🚀 שימוש בקוד (Node.js)
+### 🚀 שימוש בקוד (Node.js)
 
-### 1. אתחול (Initialization)
+#### 1. אתחול (Initialization)
 
-יש לייבא את הספרייה וליצור מופע עם שם הפרויקט ושם המודול הספציפי. לדוגמא.
+יש לייבא את הספרייה וליצור מופע חדש עם שם הפרויקט ושם המודול הספציפי.
 
 ```javascript
 const Logs = require('logs');
 
-// new Logs(ProjectName, ModuleName)
+// מבנה: new Logs(ProjectName, ModuleName)
 const log = new Logs('SmartRecords', 'CallHandler');
 
 ```
 
-### 2. רמות לוג (Log Levels)
+#### 2. רמות לוג (Log Levels)
 
 **מידע כללי (Info):**
 
@@ -52,7 +55,7 @@ log.info('התחלת שיחה חדשה', {
 ```
 
 **דיבוג (Debug):**
-משמש למידע טכני שלא צריך להופיע בלוגים הרגילים.
+משמש למידע טכני מפורט שלא צריך להופיע בלוגים הרגילים.
 
 ```javascript
 log.debug('Parsing XML response', { rawXml: '<root>...</root>' });
@@ -60,7 +63,7 @@ log.debug('Parsing XML response', { rawXml: '<root>...</root>' });
 ```
 
 **שגיאות (Error):**
-ניתן להעביר אובייקט `Error` ישירות. המערכת תשמור את ה-Stack Trace המלא.
+ניתן להעביר אובייקט `Error` ישירות. המערכת תשמור את הודעת השגיאה ואת ה-Stack Trace המלא.
 
 ```javascript
 try {
@@ -71,9 +74,9 @@ try {
 
 ```
 
-### 3. הקשר שיחה (Call ID) - 💡 מומלץ!
+#### 3. הקשר שיחה (Call ID) - 💡 מומלץ!
 
-כדי לקשור לוגים לשיחה ספציפית (לצורך חיפוש עתידי), יש להעביר את הפרמטר `callId` בתוך האובייקט.
+כדי לקשר לוגים לשיחה ספציפית (לצורך חיפוש עתידי של כל אירועי השיחה), יש להעביר את הפרמטר `callId` בתוך אובייקט הנתונים.
 
 ```javascript
 log.info('לקוח בחר שלוחה', { 
@@ -83,9 +86,9 @@ log.info('לקוח בחר שלוחה', {
 
 ```
 
-### 4. תיעוד אינטגרציות (API Requests)
+#### 4. תיעוד אינטגרציות (API Requests)
 
-פונקציה מיוחדת לתיעוד בקשות HTTP יוצאות ונכנסות. המידע נשמר במבנה ייעודי ב-DB.
+פונקציה מיוחדת לתיעוד בקשות HTTP יוצאות ונכנסות. המידע נשמר במבנה ייעודי ב-DB המקל על דיבוג תקשורת.
 
 **תחביר:**
 `log.api(description, { callId, url, method, req, res })`
@@ -102,3 +105,5 @@ log.api('בדיקת מספר מול ימות המשיח', {
 });
 
 ```
+
+---
